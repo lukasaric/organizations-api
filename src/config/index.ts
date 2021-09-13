@@ -19,7 +19,7 @@ const schema = joi.object({
 
 const createConfig = (env: any) => ({
   appUrl: env.APP_URL,
-  environment: env.NODE_ENV || 'dev-local',
+  environment: env.NODE_ENV,
   database: database(env),
   server: server(env)
 });

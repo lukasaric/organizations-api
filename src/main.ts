@@ -20,13 +20,6 @@ const program: IProgram = {
 };
 export default program;
 
-async function beforeStart({ app, db }: IContainer): Promise<void> {
-  await db.connect();
-  app.use((_req: Request, _res: Response, next: NextFunction) => {
-    RequestContext.create(db.provider.em, next);
-  });
-}
-
 function configure(provider: Provider): void {
   provider.value('logger', logger);
   provider.factory('config', () => createConfig(process.env));
@@ -38,4 +31,11 @@ function configure(provider: Provider): void {
 function registerRouters(app: Application, container: IContainer): void {
   const { userRouter } = container;
   app.use('/api/users', userRouter);
+}
+
+async function beforeStart({ app, db }: IContainer): Promise<void> {
+  await db.connect();
+  app.use((_req: Request, _res: Response, next: NextFunction) => {
+    RequestContext.create(db.provider.em, next);
+  });
 }
