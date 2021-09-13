@@ -1,9 +1,13 @@
 import App, { Router } from 'express';
 import Controller from './controller';
 import { IContainer } from 'bottlejs';
-import RepositoryFactory from './repository';
+import Repository from './repository';
 
-export default { createRouter, RepositoryFactory, Controller };
+export default {
+  createRouter,
+  Repository,
+  Controller
+};
 
 function createRouter({ userController }: IContainer): Router {
   return App.Router()

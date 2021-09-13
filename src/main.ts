@@ -21,21 +21,21 @@ const program: IProgram = {
 export default program;
 
 function configure(provider: Provider): void {
-  provider.value('logger', logger);
   provider.factory('config', () => createConfig(process.env));
+  provider.value('logger', logger);
   provider.registerMiddleware('errorHandler', ErrorHandler);
   provider.registerService('db', Db);
   provider.registerModule('user', user);
 }
 
 function registerRouters(app: Application, container: IContainer): void {
-  const { userRouter } = container;
-  app.use('/api/users', userRouter);
-}
-
-async function beforeStart({ app, db }: IContainer): Promise<void> {
-  await db.connect();
+  const { db, userRouter } = container;
   app.use((_req: Request, _res: Response, next: NextFunction) => {
     RequestContext.create(db.provider.em, next);
   });
+  app.use('/api/users', userRouter);
+}
+
+async function beforeStart({ db }: IContainer): Promise<void> {
+  await db.connect();
 }
