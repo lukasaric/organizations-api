@@ -9,6 +9,10 @@
     "start": "node dist/framework/start",
     "start:watch": "tsnd src/framework/start",
     "start:debug": "tsnd --inspect -- src/framework/start",
+    "db:seed": "ts-node src/framework/cli seed",
+    "db:migration:up": "npx mikro-orm migration:up",
+    "db:migration:down": "npx mikro-orm migration:down",
+    "db:dump": "npx mikro-orm schema:create --dump",
     "lint": "eslint src",
     "lint:fix": "eslint --fix src"
   },
