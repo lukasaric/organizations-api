@@ -1,24 +1,40 @@
-import { EntityRepository } from '@mikro-orm/postgresql';
+import { EntityData, FilterQuery, FindOneOptions, FindOptions } from '@mikro-orm/core';
+import { DatabaseProvider } from '../shared/database';
 import { IContainer } from 'bottlejs';
 import IUserRepository from './interfaces/repository';
-import { Repository } from '@mikro-orm/core';
 import User from './model';
 
-@Repository(User)
-class UserRepository extends EntityRepository<User> implements IUserRepository {
-  async update(user: User, data: Partial<User>): Promise<void> {
-    this.assign(user, data);
-    return this.persistAndFlush(user);
+class UserRepository implements IUserRepository {
+  #dbProvider: DatabaseProvider;
+
+  constructor({ db }: IContainer) {
+    this.#dbProvider = db.provider;
   }
 
-  save(data: Partial<User>): Promise<void> {
-    const user = this.create(data);
-    return this.persistAndFlush(user);
+  findOne(where: FilterQuery<User>, options?: FindOneOptions<User>): Promise<User | null> {
+    const repository = this.#dbProvider.em.getRepository(User);
+    return repository.findOne(where, options);
+  }
+
+  findAll(options?: FindOptions<User>): Promise<User[]> {
+    const repository = this.#dbProvider.em.getRepository(User);
+    return repository.findAll(options);
+  }
+
+  persistAndFlush(user: User | User[]): Promise<void> {
+    const repository = this.#dbProvider.em.getRepository(User);
+    return repository.persistAndFlush(user);
+  }
+
+  flush(): Promise<void> {
+    const repository = this.#dbProvider.em.getRepository(User);
+    return repository.flush();
+  }
+
+  assign(user: User, data: EntityData<User>): User {
+    const repository = this.#dbProvider.em.getRepository(User);
+    return repository.assign(user, data);
   }
 }
 
-function Factory({ db }: IContainer): UserRepository {
-  return db.provider.em.getRepository(User);
-}
-
-export default Factory;
+export default UserRepository;

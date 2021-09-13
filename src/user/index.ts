@@ -7,6 +7,7 @@ export default { createRouter, RepositoryFactory, Controller };
 
 function createRouter({ userController }: IContainer): Router {
   return App.Router()
-    .get('/', userController.getAll)
+    .get('/', userController.fetch)
+    .post('/', userController.create)
     .get('/:userId', userController.get);
 }

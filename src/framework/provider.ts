@@ -1,6 +1,5 @@
 import IModule, {
   MiddlewareConstructor,
-  RepositoryFactory,
   ServiceConstructor
 } from '../types/module';
 import Bottle from 'bottlejs';
@@ -12,7 +11,7 @@ class Provider extends Bottle {
     const {
       createRouter,
       Controller,
-      RepositoryFactory,
+      Repository,
       Service,
       middleware,
       modules
@@ -22,9 +21,7 @@ class Provider extends Bottle {
         this.registerMiddleware(camelCase(name), Middleware);
       });
     }
-    if (RepositoryFactory) {
-      this.registerRepository(`${name}RepositoryFactory`, RepositoryFactory);
-    }
+    if (Repository) this.registerRepository(`${name}Repository`, Repository);
     if (modules) forEach(modules, (module, name) => this.registerModule(name, module));
     if (Service) this.registerService(`${name}Service`, Service);
     this.registerService(`${name}Controller`, Controller);
@@ -42,8 +39,8 @@ class Provider extends Bottle {
     this.factory(name, container => new Service(container));
   }
 
-  registerRepository<T>(name: string, Factory: RepositoryFactory<T>): void {
-    this.instanceFactory(name, Factory);
+  registerRepository(name: string, Repository: IModule['Repository']): void {
+    this.factory(name, container => new Repository(container));
   }
 }
 
