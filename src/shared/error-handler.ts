@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import autobind from 'auto-bind';
 import { HttpError } from 'http-errors';
 import { IContainer } from 'bottlejs';
@@ -14,7 +14,7 @@ class ErrorHandler implements IErrorMiddleware {
     autobind(this);
   }
 
-  handle(error: HttpError, req: Request, res: Response): void {
+  handle(error: HttpError, req: Request, res: Response, _: NextFunction): void {
     const logOpts = { route: req.originalUrl, query: req.query };
     const log = this.#logger.child(logOpts);
     log.error(error);
