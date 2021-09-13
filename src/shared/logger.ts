@@ -8,7 +8,7 @@ function createLogger(): Logger {
   const logger = Logger.createLogger({
     name: `${process.env.npm_package_name}`,
     streams,
-    level: process.env.LOGLEVEL as LogLevel
+    level: process.env.LOG_LEVEL as LogLevel
   });
 
   return logger.child({
@@ -17,4 +17,4 @@ function createLogger(): Logger {
   });
 }
 
-export { createLogger };
+export default createLogger();

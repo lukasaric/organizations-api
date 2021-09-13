@@ -6,6 +6,7 @@ import Db from './shared/database';
 import ErrorHandler from './shared/error-handler';
 import { IContainer } from 'bottlejs';
 import IProgram from './types/program';
+import logger from './shared/logger';
 import { Provider } from './framework/provider';
 import { RequestContext } from '@mikro-orm/core';
 import user from './user';
@@ -27,6 +28,7 @@ async function beforeStart({ app, db }: IContainer): Promise<void> {
 }
 
 function configure(provider: Provider): void {
+  provider.value('logger', logger);
   provider.factory('config', () => createConfig(process.env));
   provider.registerMiddleware('errorHandler', ErrorHandler);
   provider.registerService('db', Db);
