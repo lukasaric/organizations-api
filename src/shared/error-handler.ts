@@ -15,16 +15,14 @@ class ErrorHandler implements IErrorMiddleware {
   }
 
   handle(error: HttpError, req: Request, res: Response, _: NextFunction): void {
-    const logOpts = { route: req.originalUrl, query: req.query };
-    const log = this.#logger.child(logOpts);
+    const log = this.#logger.child({ route: req.originalUrl, query: req.query });
     log.error(error);
-    if (error instanceof ValidationError) res.status(400).json({ error });
-    if (!(error instanceof HttpError) || error.statusCode === 500) {
-      res.status(500).end();
-    }
-    res
-      .status(error.statusCode)
-      .json({ error, statusCode: error.statusCode });
+    const { statusCode } = error;
+    const isValidationError = error instanceof ValidationError;
+    const isHttpError = error instanceof HttpError;
+    if (isValidationError) res.status(400).json({ error });
+    if (!isHttpError || statusCode === 500) res.status(500).end();
+    res.status(statusCode).json({ error, statusCode });
   }
 }
 
