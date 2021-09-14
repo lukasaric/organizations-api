@@ -1,6 +1,7 @@
 import database, { DatabaseConfig } from './database';
 import environments, { Environment } from './environments';
 import server, { ServerConfig } from './server';
+import IProcessEnv from '../types/processEnv';
 import joi from 'joi';
 
 export interface Config {
@@ -17,11 +18,11 @@ const schema = joi.object({
   database: joi.object()
 });
 
-const createConfig = (env: any) => ({
+const createConfig = (env: IProcessEnv) => ({
   appUrl: env.APP_URL,
   environment: env.NODE_ENV,
   database: database(env),
   server: server(env)
 });
 
-export default (env: any): Config => joi.attempt(createConfig(env), schema);
+export default (env: IProcessEnv): Config => joi.attempt(createConfig(env), schema);
