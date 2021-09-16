@@ -1,17 +1,14 @@
 import {
   Entity,
   Enum,
-  PrimaryKey,
   Property,
   Unique
 } from '@mikro-orm/core';
+import BaseEntity from '../shared/database/base-entity';
 import { Role } from '../auth/roles';
 
 @Entity()
-class User {
-  @PrimaryKey()
-  id: number;
-
+class User extends BaseEntity {
   @Property()
   firstName: string;
 
@@ -25,13 +22,8 @@ class User {
   @Enum()
   role: Role;
 
-  @Property()
-  createdAt: Date = new Date();
-
-  @Property({ onUpdate: () => new Date() })
-  updatedAt: Date = new Date();
-
   constructor(firstName: string, lastName: string, email: string, role: Role) {
+    super();
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
