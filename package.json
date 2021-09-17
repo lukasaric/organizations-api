@@ -1,7 +1,7 @@
 {
-  "name": "mikro-orm-playground",
+  "name": "orgs_api",
   "version": "1.0.0",
-  "description": "Mikro-ORM playground",
+  "description": "API for handling organizations and their members",
   "main": "./server/index.js",
   "scripts": {
     "build": "rimraf dist && tsc",
