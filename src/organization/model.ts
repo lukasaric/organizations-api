@@ -18,7 +18,7 @@ class Organization extends BaseEntity {
   @Property({ nullable: true })
   parentId: number;
 
-  @ManyToOne({ joinColumns: ['parent_id'] })
+  @ManyToOne({ joinColumn: 'parent_id' })
   organization!: Organization
 
   @OneToMany(() => Membership, it => it.organization, { orphanRemoval: true })
