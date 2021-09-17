@@ -31,7 +31,7 @@ class OrganizationController {
     return res.json({ data });
   }
 
-  async patch({ organization, body }: Request, res: Response): Promise<Response> {
+  async update({ organization, body }: Request, res: Response): Promise<Response> {
     const organizationData = joi.attempt(body, organizationSchema.tailor('update'));
     this.#repository.assign(organization, organizationData);
     await this.#repository.persistAndFlush(organization);

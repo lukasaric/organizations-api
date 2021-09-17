@@ -19,5 +19,6 @@ function createRouter({
     .get('/', organizationController.fetch)
     .post('/', organizationController.create)
     .param('organizationId', getOrganizationMiddleware)
-    .get('/:organizationId', organizationController.get);
+    .get('/:organizationId', organizationController.get)
+    .patch('/:organizationId', organizationController.update);
 }
