@@ -26,11 +26,15 @@ export class Migration20210913135216 extends Migration {
     const createOrganizationTable = knex.schema.createTable('organization', table => {
       table.increments('id');
       table.string('name').notNullable();
+      table.integer('parent_id');
+      table.foreign('parent_id')
+        .references('organization.id')
+        .onUpdate('CASCADE')
+        .onDelete('CASCADE');
       setTimestamps(table);
     });
 
-    const createMembershipTable = knex.schema
-    .createTable('membership', table => {
+    const createMembershipTable = knex.schema.createTable('membership', table => {
       const ORGANIZATION_ROLES = ['PROFESSOR', 'LEARNER'];
       table.integer('organization_id').notNullable();
       table.integer('user_id').notNullable();
@@ -54,8 +58,8 @@ export class Migration20210913135216 extends Migration {
 
   async down(): Promise<void> {
     const knex = this.getKnex();
+    this.addSql(knex.schema.dropTable('membership').toQuery());
     this.addSql(knex.schema.dropTable('user').toQuery());
     this.addSql(knex.schema.dropTable('organization').toQuery());
-    this.addSql(knex.schema.dropTable('membership').toQuery());
   }
 }
