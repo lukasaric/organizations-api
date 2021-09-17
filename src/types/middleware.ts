@@ -6,5 +6,5 @@ export interface IErrorMiddleware {
 }
 
 export interface IMiddleware {
-  handle(req: Request, res: Response, next: NextFunction, id?: string): Response | void;
+  handle(req: Request, res: Response, next: NextFunction, id?: string): Response | Promise<void> | void;
 }

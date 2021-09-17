@@ -3,7 +3,7 @@ import { Migration } from '@mikro-orm/migrations';
 export class Migration20210913135216 extends Migration {
   async up(): Promise<void> {
     const knex = this.getKnex();
-    const ROLES = ['admin', 'user'];
+    const ROLES = ['ADMIN', 'USER'];
     const createUserTable = knex.schema.createTable('user', table => {
       table.increments('id');
       table.enum('role', ROLES);

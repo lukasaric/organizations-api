@@ -7,6 +7,7 @@ import ErrorHandler from './shared/error-handler';
 import { IContainer } from 'bottlejs';
 import IProgram from './types/program';
 import logger from './shared/logger';
+import organization from './organization';
 import { Provider } from './framework/provider';
 import { RequestContext } from '@mikro-orm/core';
 import user from './user';
@@ -26,16 +27,18 @@ function configure(provider: Provider): void {
   provider.registerMiddleware('errorHandler', ErrorHandler);
   provider.registerService('db', Db);
   provider.registerModule('user', user);
-}
-
-function registerRouters(app: Application, container: IContainer): void {
-  const { db, userRouter } = container;
-  app.use((_req: Request, _res: Response, next: NextFunction) => {
-    RequestContext.create(db.provider.em, next);
-  });
-  app.use('/api/users', userRouter);
+  provider.registerModule('organization', organization);
 }
 
 async function beforeStart({ db }: IContainer): Promise<void> {
   await db.connect();
+}
+
+function registerRouters(app: Application, container: IContainer): void {
+  const { db, userRouter, organizationRouter } = container;
+  app.use((_req: Request, _res: Response, next: NextFunction) => {
+    RequestContext.create(db.provider.em, next);
+  });
+  app.use('/api/users', userRouter);
+  app.use('/api/organizations', organizationRouter);
 }
