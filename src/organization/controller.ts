@@ -15,18 +15,18 @@ class OrganizationController {
   }
 
   async fetch(_: Request, res: Response): Promise<Response> {
-    const data = await this.#repository.findAll();
+    const data = await this.#repository.findAll({ populate: ['children'] });
     return res.json({ data });
   }
 
   async get({ organization }: Request, res: Response): Promise<Response> {
-    await this.#repository.populate(organization, ['memberships']);
+    await this.#repository.populate(organization, ['memberships', 'children']);
     return res.json({ data: organization });
   }
 
   async create({ body }: Request, res: Response): Promise<Response> {
-    const { name } = joi.attempt(body, organizationSchema.tailor('create'));
-    const data = new Organization(name);
+    const { name, parentId } = joi.attempt(body, organizationSchema.tailor('create'));
+    const data = new Organization(name, parentId);
     await this.#repository.persistAndFlush(data);
     return res.json({ data });
   }

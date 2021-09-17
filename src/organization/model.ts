@@ -1,6 +1,7 @@
 import {
   Collection,
   Entity,
+  ManyToOne,
   OneToMany,
   Property,
   Unique
@@ -14,12 +15,22 @@ class Organization extends BaseEntity {
   @Unique()
   name: string;
 
+  @Property({ nullable: true })
+  parentId: number;
+
+  @ManyToOne({ fieldName: 'id' })
+  organization!: Organization
+
   @OneToMany(() => Membership, it => it.organization, { orphanRemoval: true })
   memberships = new Collection<Membership>(this);
 
-  constructor(name: string) {
+  @OneToMany(() => Organization, it => it.organization, { orphanRemoval: true })
+  children = new Collection<Organization>(this);
+
+  constructor(name: string, parentId: number) {
     super();
     this.name = name;
+    this.parentId = parentId;
   }
 }
 
