@@ -1,11 +1,14 @@
 import {
+  Collection,
   Entity,
   Enum,
+  OneToMany,
   Property,
   Unique
 } from '@mikro-orm/core';
 import BaseEntity from '../shared/database/base-entity';
-import { Role } from '../auth/roles';
+import Membership from '../organization/membership/model';
+import { Role } from './roles';
 
 @Entity()
 class User extends BaseEntity {
@@ -18,6 +21,9 @@ class User extends BaseEntity {
   @Property()
   @Unique()
   email: string
+
+  @OneToMany(() => Membership, it => it.user)
+  memberships = new Collection<Membership>(this);
 
   @Enum()
   role: Role;
