@@ -1,4 +1,4 @@
-# API Backend
+# Orgs API Backend
 
 ### Local Development
 1. `export NODE_ENV="dev-local"` Assures we are not using a "development" value which can be confused with the development cloud environment. This is *IMPORTANT* since this variable identifies that you need a sandbox built for your device. These scripts have not been tested on Windows OS.
