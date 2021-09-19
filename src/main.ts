@@ -8,6 +8,7 @@ import { IContainer } from 'bottlejs';
 import IProgram from './types/program';
 import logger from './shared/logger';
 import organization from './organization';
+import OrganizationService from './organization/organization.service';
 import { Provider } from './framework/provider';
 import { RequestContext } from '@mikro-orm/core';
 import user from './user';
@@ -28,6 +29,7 @@ function configure(provider: Provider): void {
   provider.registerService('db', Db);
   provider.registerModule('user', user);
   provider.registerModule('organization', organization);
+  provider.registerService('organizationService', OrganizationService);
 }
 
 async function beforeStart({ db }: IContainer): Promise<void> {
