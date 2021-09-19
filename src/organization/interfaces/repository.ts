@@ -14,7 +14,7 @@ interface IOrganizationRepository {
   ): Promise<Organization | null>;
   find(
     where: FilterQuery<Organization>,
-    options?: FindOneOptions<Organization>
+    options?: FindOptions<Organization>
   ): Promise<Organization[]>;
   findAll(options?: FindOptions<Organization>): Promise<Organization[]>;
   persistAndFlush(organization: Organization | Organization[]): Promise<void>;

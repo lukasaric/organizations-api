@@ -13,13 +13,13 @@ class OrganizationService implements IOrganizationService {
     autobind(this);
   }
 
-  async getChildren(organization: Organization): Promise<Organization[]> {
-    const where = { parentId: organization.id };
-    return this.#organizationRepository.find(where);
+  async getChildren(parentId: number): Promise<Organization[]> {
+    const options = { populate: ['memberships'] };
+    return this.#organizationRepository.find({ parentId }, options);
   }
 
   async getDescendants(organization: Organization): Promise<Organization[]> {
-    const children = await this.getChildren(organization);
+    const children = await this.getChildren(organization.id);
     if (!children.length) return [];
     const descendants = await P.reduce(children, async (acc, org) => {
       return acc.concat(await this.getDescendants(org));
