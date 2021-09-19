@@ -12,6 +12,10 @@ interface IOrganizationRepository {
     where: FilterQuery<Organization>,
     options?: FindOneOptions<Organization>
   ): Promise<Organization | null>;
+  find(
+    where: FilterQuery<Organization>,
+    options?: FindOneOptions<Organization>
+  ): Promise<Organization[]>;
   findAll(options?: FindOptions<Organization>): Promise<Organization[]>;
   persistAndFlush(organization: Organization | Organization[]): Promise<void>;
   assign(organization: Organization, data: EntityData<Organization>): Organization;

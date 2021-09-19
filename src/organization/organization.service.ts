@@ -14,8 +14,8 @@ class OrganizationService implements IOrganizationService {
   }
 
   async getChildren(organization: Organization): Promise<Organization[]> {
-    await this.#organizationRepository.populate(organization, ['children']);
-    return organization.children.getItems();
+    const where = { parentId: organization.id };
+    return this.#organizationRepository.find(where);
   }
 
   async getDescendants(organization: Organization): Promise<Organization[]> {
