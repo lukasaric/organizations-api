@@ -14,7 +14,7 @@ class OrganizationService implements IOrganizationService {
   }
 
   async getChildren(parentId: number): Promise<Organization[]> {
-    const options = { populate: ['memberships'] };
+    const options = { populate: ['memberships.user'] };
     return this.#organizationRepository.find({ parentId }, options);
   }
 

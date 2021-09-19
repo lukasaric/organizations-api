@@ -23,7 +23,7 @@ class OrganizationController {
   }
 
   async get({ organization }: Request, res: Response): Promise<Response> {
-    await this.#repository.populate(organization, ['memberships', 'children']);
+    await this.#repository.populate(organization, ['memberships.user', 'children']);
     return res.json({ data: organization });
   }
 
