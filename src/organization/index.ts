@@ -20,5 +20,6 @@ function createRouter({
     .post('/', organizationController.create)
     .param('organizationId', getOrganizationMiddleware)
     .get('/:organizationId', organizationController.get)
-    .patch('/:organizationId', organizationController.update);
+    .patch('/:organizationId', organizationController.update)
+    .get('/:organizationId/descendants', organizationController.getDescendants);
 }

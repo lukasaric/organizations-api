@@ -2,15 +2,18 @@ import { Request, Response } from 'express';
 import autobind from 'auto-bind';
 import { IContainer } from 'bottlejs';
 import IOrganizationRepository from './interfaces/repository';
+import IOrganizationService from './interfaces/organization.service';
 import joi from 'joi';
 import Organization from './model';
 import { organizationSchema } from './validation';
 
 class OrganizationController {
   #repository: IOrganizationRepository;
+  #organizationService: IOrganizationService
 
-  constructor({ organizationRepository }: IContainer) {
+  constructor({ organizationRepository, organizationService }: IContainer) {
     this.#repository = organizationRepository;
+    this.#organizationService = organizationService;
     autobind(this);
   }
 
@@ -36,6 +39,11 @@ class OrganizationController {
     this.#repository.assign(organization, organizationData);
     await this.#repository.persistAndFlush(organization);
     return res.json({ data: organization });
+  }
+
+  async getDescendants({ organization }: Request, res: Response): Promise<Response> {
+    const descendants = await this.#organizationService.getDescendants(organization);
+    return res.json({ data: descendants });
   }
 }
 
