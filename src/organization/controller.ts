@@ -45,6 +45,11 @@ class OrganizationController {
     const descendants = await this.#organizationService.getDescendants(organization);
     return res.json({ data: descendants });
   }
+
+  async getAncestors({ organization }: Request, res: Response): Promise<Response> {
+    const ancestors = await this.#organizationService.getAncestors(organization);
+    return res.json({ data: ancestors });
+  }
 }
 
 export default OrganizationController;
