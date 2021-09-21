@@ -38,17 +38,15 @@ class OrganizationService implements IOrganizationService {
     autobind(this);
   }
 
-  async getDescendants(organization: Organization): Promise<Organization[]> {
+  async getDescendants({ id }: Organization): Promise<Organization[]> {
     const qb = this.#dbProvider.em.createQueryBuilder(Organization);
-    const { id } = organization;
     const sql = getDescendantsQuery(id);
     const { rows: descendants } = await qb.raw(sql);
     return descendants;
   }
 
-  async getAncestors(organization: Organization): Promise<Organization[]> {
+  async getAncestors({ id }: Organization): Promise<Organization[]> {
     const qb = this.#dbProvider.em.createQueryBuilder(Organization);
-    const { id } = organization;
     const sql = getAncestorsQuery(id);
     const { rows: ancestors } = await qb.raw(sql);
     return ancestors;
