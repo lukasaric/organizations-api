@@ -1,5 +1,4 @@
 import autobind from 'auto-bind';
-import { DatabaseProvider } from '../shared/database';
 import { IContainer } from 'bottlejs';
 import IOrganizationRepository from './interfaces/repository';
 import IOrganizationService from './interfaces/organization.service';
@@ -34,11 +33,11 @@ WITH RECURSIVE org_tree AS (
 ) SELECT * FROM org_tree`;
 
 class OrganizationService implements IOrganizationService {
-  #dbProvider: DatabaseProvider
+  #queryBuilder;
   #organizationRepository: IOrganizationRepository
 
   constructor({ db, organizationRepository }: IContainer) {
-    this.#dbProvider = db.provider;
+    this.#queryBuilder = db.provider.em.createQueryBuilder(Organization);
     this.#organizationRepository = organizationRepository;
     autobind(this);
   }
@@ -52,16 +51,14 @@ class OrganizationService implements IOrganizationService {
   }
 
   async getDescendants({ id }: Organization): Promise<Organization[]> {
-    const queryBuilder = this.#dbProvider.em.createQueryBuilder(Organization);
     const sql = getDescendantsQuery(id);
-    const { rows: descendants } = await queryBuilder.raw(sql);
+    const { rows: descendants } = await this.#queryBuilder.raw(sql);
     return this.getPopulatedOrgs(descendants);
   }
 
   async getAncestors({ id }: Organization): Promise<Organization[]> {
-    const queryBuilder = this.#dbProvider.em.createQueryBuilder(Organization);
     const sql = getAncestorsQuery(id);
-    const { rows: ancestors } = await queryBuilder.raw(sql);
+    const { rows: ancestors } = await this.#queryBuilder.raw(sql);
     return this.getPopulatedOrgs(ancestors);
   }
 }

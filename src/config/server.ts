@@ -1,4 +1,4 @@
-import IProcessEnv from '../types/processEnv';
+import Env from '../types/env';
 import joi from 'joi';
 
 export interface ServerConfig {
@@ -9,6 +9,6 @@ const schema = joi.object({
   port: joi.number().port().default(3001)
 });
 
-const createConfig = (env: IProcessEnv): ServerConfig => ({ port: Number(env.PORT) });
+const createConfig = (env: Env): ServerConfig => ({ port: Number(env.SERVER_PORT) });
 
-export default (env: IProcessEnv): ServerConfig => joi.attempt(createConfig(env), schema);
+export default (env: Env): ServerConfig => joi.attempt(createConfig(env), schema);

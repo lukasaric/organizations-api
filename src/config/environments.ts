@@ -1,10 +1,6 @@
 const environments = [
   'production',
-  'staging',
-  'dev',
-  'development',
-  'dev-local',
-  'test'
+  'development'
 ] as const;
 
 export type Environment = typeof environments[number];
