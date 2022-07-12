@@ -37,12 +37,11 @@ class Db {
     const { database } = this.#config;
     this.#provider = await MikroORM.init({
       ...database,
+      populateAfterFlush: true,
       loadStrategy: LoadStrategy.JOINED,
       subscribers: this.#subscribers,
       entities
     });
-    const isDev = process.env.NODE_ENV === 'dev-local';
-    if (isDev) await this.migrate();
     return this.provider;
   }
 
@@ -57,14 +56,13 @@ class Db {
     });
   }
 
-  async migrate(): Promise<void> {
+  migrate(): Promise<void> {
     const migrator = this.#provider.getMigrator();
     return migrator.up()
       .then(() => this.#logger.info('Migrations up!'))
-      .catch(async () => {
+      .catch(error => {
         this.#logger.error('Migrating failed!');
-        await migrator.down();
-        this.#logger.info('Migrations down!');
+        this.#logger.error(error);
       });
   }
 }

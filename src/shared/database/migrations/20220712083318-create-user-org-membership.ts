@@ -1,6 +1,6 @@
 import { Migration } from '@mikro-orm/migrations';
 
-export class Migration20210913135216 extends Migration {
+export class CreateUserOrgMembership extends Migration {
   async up(): Promise<void> {
     const knex = this.getKnex();
 

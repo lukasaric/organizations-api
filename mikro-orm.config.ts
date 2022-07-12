@@ -6,4 +6,8 @@ dotenv.config();
 
 const { database } = createAppConfig(process.env);
 
-export default { ...database, entities };
+export default {
+  ...database,
+  cache: { enabled: true },
+  entities
+};
